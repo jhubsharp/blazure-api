@@ -41,7 +41,7 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ secrets.AWS_REGION }}
           function_name: blazure-api
-          zip_file: release/Blazure.Api.zip
+          zip_file: src/release/Blazure.Api.zip
           memory_size: 128
           timeout: 1
           handler: Blazure.Api::Blazure.Api.LambdaEntryPoint::FunctionHandlerAsync
