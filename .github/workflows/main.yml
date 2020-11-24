@@ -30,20 +30,9 @@ jobs:
         uses: actions/setup-dotnet@v1.7.2
         with:
           dotnet-version: '3.1.x'
+        
+      - name: Install AWS Global Tools
+        run: dotnet new -i Amazon.Lambda.Templates
       
       - name: Build and Publish  
-        run: dotnet publish -c Release -o release /p:GenerateRuntimeConfigurationFiles=true --runtime linux-x64 --self-contained false
-      
-      - name: Deploy Lambda
-        uses: appleboy/lambda-action@master
-        with:
-          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws_region: ${{ secrets.AWS_REGION }}
-          function_name: blazure-api
-          zip_file: src/release/Blazure.Api.zip
-          memory_size: 128
-          timeout: 1
-          handler: Blazure.Api::Blazure.Api.LambdaEntryPoint::FunctionHandlerAsync
-          role: ${{ secrets.AWS_LAMBDA_ROLE }}
-          runtime: dotnetcore3.1
+        run: dotnet lambda deploy-function --aws-access-key-id ${{ secrets.AWS_ACCESS_KEY_ID }} --aws-secret-key ${{ secrets.AWS_SECRET_ACCESS_KEY }} --region ${{ secrets.AWS_REGION }} --configuration netcoreapp3.1 --function-handler Blazure.Api::Blazure.Api.LambdaEntryPoint::FunctionHandlerAsync --function-runtime dotnetcore3.1 --function-name blazure-api --function-memory-size 128 --function-timeout 10
